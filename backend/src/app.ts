@@ -10,7 +10,7 @@ const app = express();
 const start = async () => {
   try {
     await sequelize.authenticate();
-    //This function creates 200000 dummy data in db,
+    //This function creates 200000 dummy data in db,don't forget to comment the function out once you use it,or it will generate data over and over again.
     // seedInventories()
     Logging.info("Database connection successful");
     app.listen(config.server.port, () => {
