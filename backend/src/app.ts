@@ -2,6 +2,7 @@ import express from "express";
 import { config } from "./config/config";
 import { sequelize } from "./database/database";
 import Logging from "./library/Logging";
+import inventoryRoute from "./routes/routes";
 
 const app = express();
 
@@ -16,5 +17,9 @@ const start = async () => {
     Logging.error({ message: "Database connection error:", error: error });
   }
 };
+
+app.use(express.json());
+
+app.use("/api", inventoryRoute);
 
 start();
