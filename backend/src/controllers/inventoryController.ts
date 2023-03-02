@@ -2,20 +2,32 @@ import { Request, Response } from "express";
 import Logging from "../library/Logging";
 import Inventory from "../models/inventory";
 
+const PAGE_SIZE = 20;
+
 export const getAllInventories = async (req: Request, res: Response) => {
   try {
     const location = req.query.location;
+    const page = Number(req.query.page || 1);
+    const offset = (page - 1) * PAGE_SIZE;
+
     let inventories;
     if (location) {
-      inventories = await Inventory.findAll({ where: { location } });
+      inventories = await Inventory.findAll({
+        where: { location },
+        limit: PAGE_SIZE,
+        offset: offset,
+      });
     } else {
-      inventories = await Inventory.findAll();
+      inventories = await Inventory.findAll({
+        limit: PAGE_SIZE,
+        offset: offset,
+      });
     }
 
     res.status(200).json(inventories);
   } catch (error) {
     Logging.error(error);
-    res.status(500).json({ message: "Internal Server error" });
+    res.status(500).json({ message: "internal server error" });
   }
 };
 
